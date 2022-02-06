@@ -38,6 +38,7 @@ pub fn run(events: &mut Vec<Event>) {
                     println!("{}", event);
                 }
             },
+            "4" => quit = true,
             _ => println!("Invalid option. Please try again.")
         }
         input.clear();
