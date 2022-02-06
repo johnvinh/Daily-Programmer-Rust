@@ -2,17 +2,6 @@ use std::io;
 use std::fmt;
 use std::fmt::Formatter;
 
-pub struct Event {
-    name: String,
-    hour: i32,
-}
-
-impl fmt::Display for Event {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "Event Name: {}, Event Hour: {}", self.name, self.hour)
-    }
-}
-
 pub fn run(events: &mut Vec<Event>) {
     let mut input: String = String::new();
     let mut quit: bool = false;
@@ -45,21 +34,32 @@ pub fn run(events: &mut Vec<Event>) {
     }
 }
 
+pub struct Event {
+    name: String,
+    hour: i32,
+}
+
 impl Event {
     pub fn new(name: String, hour: i32) -> Event {
         Event {name, hour}
     }
 }
 
+impl fmt::Display for Event {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "Event Name: {}, Event Hour: {}", self.name, self.hour)
+    }
+}
+
 fn add_event(events: &mut Vec<Event>) -> Result<(), &'static str> {
     let mut event_name: String = String::new();
     println!("Event Name:");
-    if let Err(e) = io::stdin().read_line(&mut event_name) {
+    if let Err(_e) = io::stdin().read_line(&mut event_name) {
         return Err("Failed to read name");
     }
     let mut event_hour: String = String::new();
     println!("Event Hour:");
-    if let Err(e) = io::stdin().read_line(&mut event_hour) {
+    if let Err(_e) = io::stdin().read_line(&mut event_hour) {
         return Err("Failed to read hour");
     }
     // Make sure the hour is an integer
