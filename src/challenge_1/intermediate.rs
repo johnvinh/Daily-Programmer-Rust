@@ -9,7 +9,8 @@ pub fn run(events: &mut Vec<Event>) {
         println!("1. Add Event");
         println!("2. Edit Event");
         println!("3. List Events");
-        println!("4. Quit");
+        println!("4. Delete Event");
+        println!("5. Quit");
         if let Err(_) = io::stdin().read_line(&mut input) {
             println!("There was an error reading your input. Please try again.");
             continue;
@@ -27,7 +28,14 @@ pub fn run(events: &mut Vec<Event>) {
                     println!("{}", event);
                 }
             },
-            "4" => quit = true,
+            "4" => {
+                if let Ok(()) = delete_event(events) {
+                    println!("Event deleted.");
+                } else {
+                    println!("Failed to delete event.");
+                }
+            },
+            "5" => quit = true,
             _ => println!("Invalid option. Please try again.")
         }
         input.clear();
@@ -69,5 +77,26 @@ fn add_event(events: &mut Vec<Event>) -> Result<(), &'static str> {
     };
     // Add the new event
     events.push(Event::new(event_name.trim().to_string(), event_hour));
+    Ok(())
+}
+
+fn delete_event(events: &mut Vec<Event>) -> Result<(), &'static str> {
+    println!("Events:");
+    for (i, event) in events.iter().enumerate() {
+        println!("{}: {}", i, event);
+    }
+    let mut input = String::new();
+    if let Err(_) = io::stdin().read_line(&mut input) {
+        return Err("Failed to read input");
+    }
+    let input: i32 = match input.trim().parse() {
+        Ok(n) => n,
+        Err(_) => return Err("Indice was not an integer"),
+    };
+    // Make sure the indice is within the range of the array
+    if input < 0 || input > (events.len() as i32 - 1) {
+        return Err("Indice is not within the correct range");
+    }
+    events.remove(input as usize);
     Ok(())
 }
