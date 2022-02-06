@@ -23,6 +23,13 @@ pub fn run(events: &mut Vec<Event>) {
                     println!("Failed to add event.");
                 }
             },
+            "2" => {
+                if let Ok(()) = edit_event(events) {
+                    println!("Event successfully edited!");
+                } else {
+                    println!("Failed to edit event");
+                }
+            },
             "3" => {
                 for event in &*events {
                     println!("{}", event);
@@ -98,5 +105,40 @@ fn delete_event(events: &mut Vec<Event>) -> Result<(), &'static str> {
         return Err("Indice is not within the correct range");
     }
     events.remove(input as usize);
+    Ok(())
+}
+
+fn edit_event(events: &mut Vec<Event>) -> Result<(), &'static str> {
+    println!("Events:");
+    for (i, event) in events.iter().enumerate() {
+        println!("{}: {}", i, event);
+    }
+    let mut input: String = String::new();
+    if let Err(_) = io::stdin().read_line(&mut input) {
+        return Err("Failed to read input");
+    }
+    let indice: i32 = match input.trim().parse() {
+        Ok(n) => n,
+        Err(_) => return Err("Indice was not an integer")
+    };
+    // Make sure the indice is within the range of the array
+    if indice < 0 || indice > (events.len() as i32 - 1) {
+        return Err("Indice is not within the correct range");
+    }
+    println!("Enter the new event name:");
+    let mut event_name = String::new();
+    if let Err(_) = io::stdin().read_line(&mut event_name) {
+        return Err("Failed to read event name");
+    }
+    println!("Enter the new event hour:");
+    let mut event_hour = String::new();
+    if let Err(_) = io::stdin().read_line(&mut event_hour) {
+        return Err("Failed to read event hour");
+    }
+    let event_hour: i32 = match event_hour.trim().parse() {
+        Ok(n) => n,
+        Err(_) => return Err("Hour was not an integer"),
+    };
+    events[indice as usize] = Event::new(event_name.trim().to_string(), event_hour);
     Ok(())
 }
