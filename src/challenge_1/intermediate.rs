@@ -67,6 +67,6 @@ fn add_event(events: &mut Vec<Event>) -> Result<(), &'static str> {
         Err(_) => return Err("Invalid hour"),
     };
     // Add the new event
-    events.push(Event::new(event_name, event_hour));
+    events.push(Event::new(event_name.trim().to_string(), event_hour));
     Ok(())
 }
