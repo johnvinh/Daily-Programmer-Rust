@@ -34,7 +34,31 @@ pub mod easy {
         letter_values
     }
 
-    pub fn letter_sum(word: String) {
-        
+    pub fn letter_sum(word: &str) -> i32 {
+        let letter_values = get_letter_values();
+        let mut sum: i32 = 0;
+        for character in word.chars() {
+            sum += match letter_values.get(&character) {
+                Some(&value) => value,
+                None => 0,
+            };
+        }
+        sum
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::easy::*;
+
+    #[test]
+    fn test_letter_sum() {
+        // Test cases provided by the problem description
+        assert_eq!(letter_sum(""), 0);
+        assert_eq!(letter_sum("a"), 1);
+        assert_eq!(letter_sum("z"), 26);
+        assert_eq!(letter_sum("cab"), 6);
+        assert_eq!(letter_sum("excellent"), 100);
+        assert_eq!(letter_sum("microspectrophotometries"), 317);
     }
 }
