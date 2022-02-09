@@ -55,6 +55,39 @@ pub fn letter_sum(word: &str) -> i32 {
     sum
 }
 
+pub mod bonus {
+    use super::*;
+
+    pub fn solve() {
+        let words = get_challenge_words().unwrap();
+
+        // Question 1
+        let sum_319 = || {
+            for word in &words {
+                let sum = letter_sum(word);
+                if sum == 319 {
+                    return word.clone();
+                }
+            }
+            String::from("")
+        };
+        // Question 2
+        let odd_sum = || {
+            let mut count = 0;
+            for word in &words {
+                let sum = letter_sum(word);
+                if sum % 2 != 0 {
+                    count += 1;
+                }
+            }
+            count
+        };
+
+        println!("The word with a letter sum of 319 is: {}", sum_319());
+        println!("There are {} words with an odd letter sum.", odd_sum());
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
